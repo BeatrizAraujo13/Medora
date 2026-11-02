@@ -18,5 +18,5 @@ if __name__ == "__main__":
     with app.app_context():
         upgrade(directory=str(diretorio_migracoes))
         popular_banco()
-    print("Vitta Clinic disponível em http://127.0.0.1:5000")
+    print("Medora disponível em http://127.0.0.1:5000")
     app.run(host="127.0.0.1", port=5000, debug=True, use_reloader=False)

@@ -3,9 +3,9 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#0b7285">
-  <title>Entrar | Vitta Clinic</title>
-  <link rel="icon" href="assets/images/logo.svg" type="image/svg+xml">
+  <meta name="theme-color" content="#0d5169">
+  <title>Entrar | Medora</title>
+  <link rel="icon" href="assets/images/logo.png" type="image/png">
   <link rel="stylesheet" href="css/normalizacao.css">
   <link rel="stylesheet" href="css/variaveis.css">
   <link rel="stylesheet" href="css/global.css">
@@ -14,37 +14,30 @@
 </head>
 <body class="login-page">
   <main class="login-layout">
-    <section class="login-brand" aria-label="Vitta Clinic">
-      <img src="assets/images/logo.svg" alt="" width="58" height="58">
-      <p class="eyebrow">Cuidado conectado</p>
-      <h1>Gestão simples.<br>Atendimento mais humano.</h1>
+    <section class="login-brand" aria-label="Medora">
+      <p class="eyebrow">Medora</p>
+      <h1>Inovação na gestão.<br>Humanidade no cuidado.</h1>
       <p>Organize sua clínica e acompanhe cada etapa do cuidado em um só lugar.</p>
       <div class="brand-decoration" aria-hidden="true">✳</div>
     </section>
     <section class="login-card">
-      <img class="login-logo" src="assets/images/logo.svg" alt="Vitta Clinic" width="48" height="48">
+      <img class="login-logo" src="assets/images/logo.png" alt="Medora" width="64" height="48">
       <p class="eyebrow">Bem-vindo(a) de volta</p>
       <h2>Acesse sua conta</h2>
       <p class="muted">Entre com seu e-mail e senha para continuar.</p>
       <form id="login-form" class="form-stack" novalidate>
-        <label for="email">E-mail</label>
+        <label for="email">E-mail:</label>
         <input id="email" name="email" type="email" autocomplete="username" placeholder="voce@clinica.com" required>
-        <label for="password">Senha</label>
+        <label for="password">Senha:</label>
         <input id="password" name="password" type="password" autocomplete="current-password" placeholder="Sua senha" required>
         <p id="login-error" class="form-error" role="alert" aria-live="polite"></p>
         <button class="button button-primary button-wide" type="submit">Entrar na plataforma</button>
       </form>
-      <details class="demo-credentials">
-        <summary>Acessos para demonstração</summary>
-        <p><strong>Administrador:</strong> admin@vitta.com / 123456</p>
-        <p><strong>Médico:</strong> medico@vitta.com / 123456</p>
-        <p><strong>Recepcionista:</strong> recepcao@vitta.com / 123456</p>
-      </details>
-      <p class="login-footnote">Ambiente demonstrativo. Não utilize dados reais de pacientes.</p>
     </section>
   </main>
   <div id="toast-region" class="toast-region" aria-live="polite" aria-atomic="true"></div>
   <script src="js/armazenamento.js"></script>
+  <script src="js/utilitarios.js"></script>
   <script src="js/autenticacao.js"></script>
 </body>
 </html>

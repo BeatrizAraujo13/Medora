@@ -34,7 +34,7 @@
     function editarEspecialidade(item) {
       window.Vitta.modal({
         title: item ? "Editar especialidade" : "Nova especialidade", values: item,
-        fields: [{ name: "name", label: "Nome", required: true, full: true }, { name: "description", label: "Descrição", type: "textarea", full: true }],
+        fields: [{ name: "name", label: "Nome", validation: "name", required: true, full: true }, { name: "description", label: "Descrição", type: "textarea", full: true }],
         onSubmit: (form) => {
           const duplicate = window.VittaStorage.all("specialties").some((entry) => entry.name.toLocaleLowerCase("pt-BR") === form.name.trim().toLocaleLowerCase("pt-BR") && entry.id !== (item && item.id));
           if (duplicate) { window.Vitta.toast("Esta especialidade já está cadastrada.", "error"); return false; }

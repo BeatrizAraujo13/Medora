@@ -49,21 +49,20 @@
         title: editing ? "Editar paciente" : "Novo paciente",
         values: patient,
         fields: [
-          { name: "name", label: "Nome completo", required: true, full: true },
+          { name: "name", label: "Nome completo", validation: "name", required: true, full: true },
           { name: "cpf", label: "CPF", required: true, placeholder: "000.000.000-00", maxLength: 14 },
           { name: "birthDate", label: "Data de nascimento", type: "date", max: window.Vitta.today(), required: true },
-          { name: "phone", label: "Telefone", required: true, placeholder: "(00) 00000-0000" },
+          { name: "phone", label: "Telefone", type: "tel", required: true, placeholder: "(00) 00000-0000" },
           { name: "email", label: "E-mail", type: "email" },
           { name: "insurance", label: "Convênio" },
-          { name: "address", label: "Endereço", full: true },
+          { name: "address", label: "Endereço", validation: "address", full: true },
           { name: "notes", label: "Observações", type: "textarea", full: true }
         ],
         onSubmit: (form) => {
           const cpf = window.Vitta.cpfFormat(form.cpf);
           const duplicate = window.VittaStorage.all("patients").some((item) => item.cpf.replace(/\D/g, "") === cpf.replace(/\D/g, "") && item.id !== (patient && patient.id));
           if (duplicate) { window.Vitta.toast("Já existe um paciente cadastrado com este CPF.", "error"); return false; }
-          const birth = new Date(form.birthDate + "T00:00:00");
-          if (birth > new Date(window.Vitta.today() + "T23:59:59")) { window.Vitta.toast("A data de nascimento não pode estar no futuro.", "error"); return false; }
+          if (form.birthDate > window.Vitta.today()) { window.Vitta.toast("A data de nascimento deve ser hoje ou anterior.", "error"); return false; }
           return window.VittaStorage.save("patients", { ...(patient || {}), ...form, cpf, id: patient ? patient.id : window.Vitta.id("pac") }).then(() => {
             window.Vitta.toast(editing ? "Cadastro atualizado." : "Paciente cadastrado.");
             renderizar();
@@ -72,6 +71,24 @@
       });
       const cpfInput = document.getElementById("field-cpf");
       cpfInput.addEventListener("input", () => { cpfInput.value = window.Vitta.cpfFormat(cpfInput.value); });
+      const birthDateInput = document.getElementById("field-birthDate");
+      const validarDataNascimento = () => {
+        if (birthDateInput.validity.rangeOverflow) {
+          birthDateInput.setCustomValidity("A data de nascimento deve ser hoje ou anterior.");
+        } else if (birthDateInput.validity.badInput && !birthDateInput.value) {
+          birthDateInput.setCustomValidity("Digite uma data de nascimento válida.");
+        } else {
+          birthDateInput.setCustomValidity("");
+        }
+      };
+      birthDateInput.addEventListener("input", validarDataNascimento);
+      birthDateInput.addEventListener("change", validarDataNascimento);
+      birthDateInput.addEventListener("blur", () => {
+        validarDataNascimento();
+        if (birthDateInput.validity.badInput || birthDateInput.validity.rangeOverflow) {
+          birthDateInput.reportValidity();
+        }
+      });
     }
     renderizar();
   };
