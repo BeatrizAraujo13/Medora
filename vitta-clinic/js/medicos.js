@@ -49,11 +49,11 @@
       window.Vitta.modal({
         title: doctor ? "Editar médico" : "Novo médico", values: doctor,
         fields: [
-          { name: "name", label: "Nome completo", required: true, full: true },
+          { name: "name", label: "Nome completo", validation: "name", required: true, full: true },
           { name: "crm", label: "CRM", required: true },
           { name: "specialtyId", label: "Especialidade", type: "select", required: true, options: () => window.VittaStorage.all("specialties").map((item) => ({ value: item.id, label: item.name })) },
           { name: "email", label: "E-mail", type: "email" },
-          { name: "phone", label: "Telefone", required: true },
+          { name: "phone", label: "Telefone", type: "tel", required: true, placeholder: "(00) 00000-0000" },
           { name: "schedule", label: "Horário de atendimento", placeholder: "Ex.: Seg a sex, 08:00–17:00", full: true }
         ],
         onSubmit: (form) => {

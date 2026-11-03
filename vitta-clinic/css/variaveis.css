@@ -1,20 +1,20 @@
 :root {
   color-scheme: light;
-  --navy: #173b4a;
-  --primary: #087e8b;
-  --primary-dark: #066874;
-  --primary-soft: #e4f4f4;
-  --green: #3b9b78;
-  --green-soft: #e5f5ed;
-  --ink: #20343e;
-  --muted: #71838a;
-  --line: #e3ebed;
+  --navy: #0d5169;
+  --primary: #30cfe0;
+  --primary-dark: #0d5169;
+  --primary-soft: #e5f9fb;
+  --green: #0d5169;
+  --green-soft: #e5f9fb;
+  --ink: #0d5169;
+  --muted: #527987;
+  --line: #c8e8ea;
   --surface: #fff;
-  --canvas: #f4f8f8;
-  --danger: #bd4545;
-  --danger-soft: #fff0ef;
-  --warning: #a86b19;
-  --shadow: 0 12px 36px rgba(21, 59, 74, .08);
+  --canvas: #f0fbfc;
+  --danger: #0d5169;
+  --danger-soft: #e5f9fb;
+  --warning: #0d5169;
+  --shadow: 0 12px 36px rgba(13, 81, 105, .08);
   --radius: 14px;
   --font: "Segoe UI", Arial, sans-serif;
 }
