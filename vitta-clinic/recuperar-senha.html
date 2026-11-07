@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0d5169">
+  <meta name="referrer" content="no-referrer">
+  <title>Recuperar senha | Medora</title>
+  <link rel="icon" href="assets/images/logo.png" type="image/png">
+  <link rel="stylesheet" href="css/normalizacao.css">
+  <link rel="stylesheet" href="css/variaveis.css">
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/acesso.css">
+  <link rel="stylesheet" href="css/responsivo.css">
+</head>
+<body class="login-page">
+  <main class="login-layout">
+    <section class="login-brand" aria-label="Medora">
+      <p class="eyebrow">Medora</p>
+      <h1>Inovação na gestão.<br>Humanidade no cuidado.</h1>
+      <p>Organize sua clínica e acompanhe cada etapa do cuidado em um só lugar.</p>
+      <div class="brand-decoration" aria-hidden="true">✳</div>
+    </section>
+    <section class="login-card">
+      <img class="login-logo" src="assets/images/logo.png" alt="Medora" width="64" height="48">
+      <p class="eyebrow">Recuperação de acesso</p>
+      <h2>Esqueceu sua senha?</h2>
+      <p class="muted">Informe o e-mail associado à sua conta.</p>
+      <form id="request-reset-form" class="form-stack recovery-form" novalidate>
+        <label for="email">E-mail:</label>
+        <input id="email" name="email" type="email" autocomplete="email" placeholder="voce@clinica.com" required>
+        <p id="recovery-message" class="recovery-message" role="status" aria-live="polite"></p>
+        <button class="button button-primary button-wide" type="submit">Enviar link de recuperação</button>
+      </form>
+      <a class="recovery-back" href="index.html">Voltar para o login</a>
+    </section>
+  </main>
+  <script src="js/armazenamento.js"></script>
+  <script src="js/recuperacao-senha.js"></script>
+</body>
+</html>

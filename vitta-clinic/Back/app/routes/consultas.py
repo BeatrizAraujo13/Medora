@@ -50,6 +50,33 @@ def listar():
     return {"items": [appointment.para_dicionario() for appointment in items]}
 
 
+@bp.get("/mine")
+@perfis_obrigatorios("paciente")
+def minhas_consultas():
+    patient_id = usuario_atual().patient.id
+    appointments = (
+        Consulta.query.filter_by(patient_id=patient_id)
+        .order_by(Consulta.appointment_date, Consulta.appointment_time)
+        .all()
+    )
+    return {
+        "items": [
+            {
+                "id": appointment.id,
+                "patient_id": appointment.patient_id,
+                "patient_name": appointment.patient.name,
+                "doctor_id": appointment.doctor_id,
+                "doctor_name": appointment.doctor.name,
+                "specialty_id": appointment.doctor.specialty_id,
+                "date": appointment.appointment_date.isoformat(),
+                "time": appointment.appointment_time.strftime("%H:%M"),
+                "status": appointment.status.value,
+            }
+            for appointment in appointments
+        ]
+    }
+
+
 @bp.post("")
 @perfis_obrigatorios("admin", "recepcionista")
 def criar():

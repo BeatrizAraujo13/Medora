@@ -11,6 +11,20 @@ class Configuracao:
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     JWT_ACCESS_TOKEN_EXPIRES = 60 * 30
     JWT_REFRESH_TOKEN_EXPIRES = 60 * 60 * 24 * 30
+    SMTP_HOST = os.getenv("SMTP_HOST")
+    SMTP_PORT = int(os.getenv("SMTP_PORT", "587"))
+    SMTP_USERNAME = os.getenv("SMTP_USERNAME")
+    SMTP_PASSWORD = os.getenv("SMTP_PASSWORD")
+    SMTP_FROM_EMAIL = os.getenv("SMTP_FROM_EMAIL")
+    SMTP_USE_TLS = os.getenv("SMTP_USE_TLS", "true").lower() == "true"
+    SMTP_TIMEOUT = int(os.getenv("SMTP_TIMEOUT", "10"))
+    PASSWORD_RESET_PUBLIC_URL = os.getenv(
+        "PASSWORD_RESET_PUBLIC_URL", "http://localhost:5000"
+    ).rstrip("/")
+    PASSWORD_RESET_TOKEN_TTL_SECONDS = 30 * 60
+    PASSWORD_RESET_EMAIL_LIMIT = 3
+    PASSWORD_RESET_IP_LIMIT = 10
+    PASSWORD_RESET_RATE_WINDOW_SECONDS = 60 * 60
     CORS_ORIGINS = [
         origin.strip()
         for origin in os.getenv(

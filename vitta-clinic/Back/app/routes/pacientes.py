@@ -23,6 +23,22 @@ def listar():
     return {"items": [patient.para_dicionario() for patient in items]}
 
 
+@bp.get("/me")
+@perfis_obrigatorios("paciente")
+def meu_cadastro():
+    patient = usuario_atual().patient
+    return {
+        "patient": {
+            "id": patient.id,
+            "name": patient.name,
+            "cpf": patient.cpf,
+            "birth_date": patient.birth_date.isoformat(),
+            "phone": patient.phone,
+            "email": patient.email,
+        }
+    }
+
+
 @bp.post("")
 @perfis_obrigatorios("admin", "recepcionista")
 def criar():

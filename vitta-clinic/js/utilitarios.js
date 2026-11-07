@@ -35,15 +35,8 @@
     },
     date(value) { return value ? new Date(value + "T12:00:00").toLocaleDateString("pt-BR") : "—"; },
     cpfValid(value) {
-      const cpf = String(value || "").replace(/\D/g, "");
-      if (cpf.length !== 11 || /^(\d)\1{10}$/.test(cpf)) return false;
-      const digitoVerificador = (length) => {
-        let soma = 0;
-        for (let i = 0; i < length; i++) soma += Number(cpf[i]) * (length + 1 - i);
-        const resto = (soma * 10) % 11;
-        return resto === 10 ? 0 : resto;
-      };
-      return digitoVerificador(9) === Number(cpf[9]) && digitoVerificador(10) === Number(cpf[10]);
+      const cpf = String(value || "");
+      return /^\d{11}$/.test(cpf) || /^\d{3}\.\d{3}\.\d{3}-\d{2}$/.test(cpf);
     },
     cpfFormat(value) {
       const cpf = String(value || "").replace(/\D/g, "").slice(0, 11);
@@ -128,6 +121,7 @@
         input.value = value;
         input.required = Boolean(field.required);
         if (field.maxLength) input.maxLength = field.maxLength;
+        if (field.minLength) input.minLength = field.minLength;
         if (field.min) input.min = field.min;
         if (field.max) input.max = field.max;
         if (field.readOnly) input.readOnly = true;

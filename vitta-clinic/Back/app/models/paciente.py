@@ -4,7 +4,7 @@ from datetime import datetime, timezone
 
 from app.extensoes import db
 from app.utils.criptografia import DataCriptografada, TextoCriptografado
-from app.utils.validadores import cpf_valido, normalizar_cpf
+from app.utils.validadores import cpf_formato_valido, cpf_valido, normalizar_cpf
 
 
 class Paciente(db.Model):
@@ -24,12 +24,15 @@ class Paciente(db.Model):
 
     appointments = db.relationship("Consulta", back_populates="patient")
     records = db.relationship("Prontuario", back_populates="patient")
+    user = db.relationship("Usuario", back_populates="patient", uselist=False)
 
     @staticmethod
     def normalizar_e_validar_cpf(value: str) -> str:
+        if not cpf_formato_valido(value):
+            raise ValueError("CPF deve conter exatamente 11 números.")
         cpf = normalizar_cpf(value)
         if not cpf_valido(cpf):
-            raise ValueError("CPF inválido.")
+            raise ValueError("CPF deve conter exatamente 11 números.")
         return cpf
 
     def para_dicionario(self):

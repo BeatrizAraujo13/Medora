@@ -60,6 +60,10 @@
         ],
         onSubmit: (form) => {
           const cpf = window.Vitta.cpfFormat(form.cpf);
+          if (!window.Vitta.cpfValid(cpf)) {
+            window.Vitta.toast("Informe exatamente 11 números para o CPF.", "error");
+            return false;
+          }
           const duplicate = window.VittaStorage.all("patients").some((item) => item.cpf.replace(/\D/g, "") === cpf.replace(/\D/g, "") && item.id !== (patient && patient.id));
           if (duplicate) { window.Vitta.toast("Já existe um paciente cadastrado com este CPF.", "error"); return false; }
           if (form.birthDate > window.Vitta.today()) { window.Vitta.toast("A data de nascimento deve ser hoje ou anterior.", "error"); return false; }

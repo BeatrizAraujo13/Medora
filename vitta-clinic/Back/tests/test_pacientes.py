@@ -16,19 +16,25 @@ def dados_paciente(**overrides):
     return payload
 
 
-def testar_paciente_exige_cpf_valido_e_unico(cliente_teste, cabecalho_autenticacao):
-    invalid = cliente_teste.post(
+def testar_paciente_exige_11_digitos_e_cpf_unico(cliente_teste, cabecalho_autenticacao):
+    accepted = cliente_teste.post(
         "/api/v1/patients",
         headers=cabecalho_autenticacao,
         json=dados_paciente(cpf="123.456.789-00"),
     )
-    assert invalid.status_code == 400
-    assert "CPF inválido" in invalid.get_json()["error"]
+    assert accepted.status_code == 201
+
+    malformed = cliente_teste.post(
+        "/api/v1/patients",
+        headers=cabecalho_autenticacao,
+        json=dados_paciente(cpf="123.45a.789-00"),
+    )
+    assert malformed.status_code == 400
 
     duplicate = cliente_teste.post(
         "/api/v1/patients",
         headers=cabecalho_autenticacao,
-        json=dados_paciente(cpf="529.982.247-25"),
+        json=dados_paciente(cpf="12345678900"),
     )
     assert duplicate.status_code == 409
 

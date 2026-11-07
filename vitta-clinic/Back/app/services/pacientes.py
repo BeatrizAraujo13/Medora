@@ -8,7 +8,7 @@ from app.extensoes import db
 from app.models import Consulta, Prontuario, Paciente
 from app.services.comum import confirmar_ou_reverter, obter_ou_404
 from app.utils.erros import ErroApi
-from app.utils.validadores import cpf_valido, normalizar_cpf
+from app.utils.validadores import cpf_formato_valido, cpf_valido, normalizar_cpf
 
 
 def listar_pacientes(search: str | None = None, include_deleted: bool = False):
@@ -26,7 +26,10 @@ def listar_pacientes(search: str | None = None, include_deleted: bool = False):
 
 
 def salvar_paciente(data: dict, patient: Paciente | None = None) -> Paciente:
-    cpf = normalizar_cpf(data.get("cpf", patient.cpf if patient else ""))
+    cpf_original = data.get("cpf", patient.cpf if patient else "")
+    if not cpf_formato_valido(cpf_original):
+        raise ErroApi("CPF deve conter exatamente 11 números.", 400)
+    cpf = normalizar_cpf(cpf_original)
     if not cpf_valido(cpf):
         raise ErroApi("CPF inválido.", 400)
     existing = Paciente.query.filter_by(cpf=cpf).first()
@@ -45,6 +48,10 @@ def salvar_paciente(data: dict, patient: Paciente | None = None) -> Paciente:
 
 def excluir_paciente(patient_id: int):
     patient = obter_ou_404(Paciente, patient_id, "Paciente")
+    if patient.user:
+        raise ErroApi(
+            "Desvincule a conta de acesso antes de excluir este paciente.", 409
+        )
     has_history = (
         db.session.query(Consulta.id).filter_by(patient_id=patient.id).first()
         or db.session.query(Prontuario.id).filter_by(patient_id=patient.id).first()
