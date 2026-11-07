@@ -8,18 +8,16 @@ def normalizar_cpf(value: str) -> str:
     return re.sub(r"\D", "", value or "")
 
 
+def cpf_formato_valido(value: str) -> bool:
+    """Aceita 11 dígitos ASCII, sem máscara ou no formato 000.000.000-00."""
+    return bool(
+        re.fullmatch(r"(?:[0-9]{11}|[0-9]{3}\.[0-9]{3}\.[0-9]{3}-[0-9]{2})", value or "")
+    )
+
+
 def cpf_valido(value: str) -> bool:
-    """Valida os 11 dígitos do CPF usando os dois dígitos verificadores."""
-    cpf = normalizar_cpf(value)
-    if len(cpf) != 11 or len(set(cpf)) == 1:
-        return False
-
-    def digito_verificador(length: int) -> int:
-        total = sum(int(cpf[listar]) * (length + 1 - listar) for listar in range(length))
-        remainder = (total * 10) % 11
-        return 0 if remainder == 10 else remainder
-
-    return digito_verificador(9) == int(cpf[9]) and digito_verificador(10) == int(cpf[10])
+    """Valida o formato numérico de 11 dígitos sem validar os verificadores oficiais."""
+    return value.isascii() and value.isdigit() and len(value) == 11
 
 
 def normalizar_crm(value: str) -> str:

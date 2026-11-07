@@ -77,13 +77,15 @@
   }
 
   function normalizarPerfil(usuario) {
-    const perfis = { admin: "Administrador", medico: "Médico", recepcionista: "Recepcionista" };
+    const perfis = { admin: "Administrador", medico: "Médico", recepcionista: "Recepcionista", paciente: "Paciente" };
     return {
       id: String(usuario.id),
       name: usuario.name,
       email: usuario.email,
       role: perfis[usuario.role] || usuario.role,
-      doctorId: usuario.doctor_id == null ? null : String(usuario.doctor_id)
+      active: usuario.active !== false,
+      doctorId: usuario.doctor_id == null ? null : String(usuario.doctor_id),
+      patientId: usuario.patient_id == null ? null : String(usuario.patient_id)
     };
   }
 
@@ -215,9 +217,76 @@
         return sessao.user;
       });
     },
+    requestPasswordReset(email) {
+      return requisitar("/auth/password-reset", {
+        method: "POST",
+        body: JSON.stringify({ email })
+      });
+    },
+    validatePasswordReset(token) {
+      return requisitar("/auth/password-reset/validate", {
+        method: "POST",
+        body: JSON.stringify({ token })
+      });
+    },
+    resetPassword(token, password, confirmPassword) {
+      return requisitar("/auth/password-reset/confirm", {
+        method: "POST",
+        body: JSON.stringify({ token, password, confirm_password: confirmPassword })
+      });
+    },
+    async verifySession() {
+      if (!sessao) throw new Error("Sua sessão expirou. Entre novamente.");
+      const response = await requisitar("/auth/me");
+      sessao.user = normalizarPerfil(response.user);
+      salvarSessao();
+      return sessao.user;
+    },
+    async logout() {
+      if (!sessao) return;
+      await requisitar("/auth/logout", {
+        method: "POST",
+        body: JSON.stringify({ refresh_token: sessao.refreshToken })
+      });
+    },
+    async createUser(user) {
+      const response = await requisitar("/users", {
+        method: "POST",
+        body: JSON.stringify(user)
+      });
+      return normalizarPerfil(response.user);
+    },
+    async updateUser(id, user) {
+      const response = await requisitar(`/users/${Number(id)}`, {
+        method: "PATCH",
+        body: JSON.stringify(user)
+      });
+      return normalizarPerfil(response.user);
+    },
+    async listUsers() {
+      const response = await requisitar("/users");
+      dados.users = response.items.map(normalizarPerfil);
+      return dados.users;
+    },
+    async deleteUser(id) {
+      return requisitar(`/users/${Number(id)}`, { method: "DELETE" });
+    },
     async initialize() {
       if (!sessao || !sessao.accessToken) return;
       const role = sessao.user.role;
+      if (role === "Paciente") {
+        const [patientResponse, appointmentResponse] = await Promise.all([
+          requisitar("/patients/me"),
+          requisitar("/appointments/mine")
+        ]);
+        dados.patients = [normalizarPaciente(patientResponse.patient)];
+        dados.appointments = appointmentResponse.items.map(normalizarConsulta);
+        dados.doctors = [];
+        dados.specialties = [];
+        dados.records = [];
+        dados.users = [];
+        return dados;
+      }
       const requisicoes = [
         requisitar("/patients").then((resposta) => { dados.patients = resposta.items.map(normalizarPaciente); }),
         requisitar("/doctors").then((resposta) => {
@@ -230,7 +299,10 @@
         requisitar("/appointments").then((resposta) => { dados.appointments = resposta.items.map(normalizarConsulta); })
       ];
       if (role === "Administrador") {
-        requisicoes.push(requisitar("/specialties").then((resposta) => { dados.specialties = resposta.items.map(normalizarEspecialidade); }));
+        requisicoes.push(
+          requisitar("/specialties").then((resposta) => { dados.specialties = resposta.items.map(normalizarEspecialidade); }),
+          this.listUsers()
+        );
       }
       if (role === "Administrador" || role === "Médico") {
         requisicoes.push(requisitar("/records").then((resposta) => { dados.records = resposta.items.map(normalizarProntuario); }));

@@ -22,6 +22,15 @@
 .login-card .form-stack input[type="email"]:focus,
 .login-card .form-stack input[type="password"]:focus { border-color: #0d5169; box-shadow: 0 0 0 3px rgba(48, 207, 224, .18); }
 .login-card .button-primary { background: #0d5169; }
+.recovery-link { justify-self: end; color: #0d5169; font-size: .9rem; font-weight: 700; }
+.recovery-link:hover { color: #30aebd; }
+.recovery-link:focus-visible { outline: 3px solid rgba(48, 207, 224, .45); outline-offset: 3px; border-radius: 3px; }
+.recovery-message { min-height: 22px; color: #0d5169; font-size: .9rem; }
+.recovery-message.error { color: var(--danger); }
+.recovery-back { display: inline-block; margin-top: 20px; color: #0d5169; font-weight: 700; }
+.recovery-form .button-primary { margin-top: 6px; }
+.recovery-form[hidden] { display: none; }
+.recovery-help { margin: 0 0 16px; color: var(--muted); font-size: .88rem; line-height: 1.5; }
 .form-error { min-height: 20px; color: var(--danger); font-size: .88rem; }
 .demo-credentials { margin-top: 22px; color: var(--muted); font-size: .83rem; }
 .demo-credentials summary { cursor: pointer; color: var(--primary-dark); font-weight: 700; }

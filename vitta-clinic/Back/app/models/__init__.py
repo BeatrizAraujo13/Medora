@@ -6,6 +6,8 @@ from app.models.paciente import Paciente
 from app.models.prontuario import Prontuario
 from app.models.especialidade import Especialidade
 from app.models.usuario import Usuario, PerfilUsuario
+from app.models.redefinicao_senha import SolicitacaoRedefinicaoSenha
+from app.models.token_revogado import TokenRevogado
 
 __all__ = [
     "Consulta",
@@ -16,4 +18,6 @@ __all__ = [
     "Especialidade",
     "Usuario",
     "PerfilUsuario",
+    "SolicitacaoRedefinicaoSenha",
+    "TokenRevogado",
 ]

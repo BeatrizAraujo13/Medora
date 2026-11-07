@@ -4,7 +4,7 @@ import os
 from pathlib import Path
 
 import click
-from flask import Flask, abort, send_from_directory
+from flask import Flask, abort, redirect, send_from_directory
 
 from app.configuracao import Configuracao
 from app.extensoes import bcrypt, cors, db, jwt, migrate
@@ -31,6 +31,7 @@ def criar_aplicacao(config_object=Configuracao):
     registrar_tratadores_de_erro(app)
 
     from app import models  # noqa: F401
+    from app.models import TokenRevogado
     from app.routes import api_v1
 
     app.register_blueprint(api_v1)
@@ -38,6 +39,19 @@ def criar_aplicacao(config_object=Configuracao):
     @app.get("/")
     def pagina_inicial():
         return send_from_directory(diretorio_frontend, "index.html")
+
+    @app.get("/admin")
+    def area_administrativa():
+        return redirect("/pages/dashboard.html?area=admin")
+
+    @app.get("/funcionario")
+    def area_funcionario():
+        return redirect("/pages/dashboard.html?area=funcionario")
+
+    @app.get("/cliente")
+    def area_cliente():
+        return redirect("/pages/cliente.html?area=cliente")
+
 
     @app.get("/<path:caminho>")
     def arquivo_frontend(caminho):
@@ -63,6 +77,10 @@ def criar_aplicacao(config_object=Configuracao):
     @jwt.unauthorized_loader
     def token_ausente(_reason):
         return {"error": "Token JWT obrigatório."}, 401
+
+    @jwt.token_in_blocklist_loader
+    def token_revogado(_header, payload):
+        return db.session.get(TokenRevogado, payload["jti"]) is not None
 
     @jwt.invalid_token_loader
     def token_invalido(_reason):
