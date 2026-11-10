@@ -25,9 +25,10 @@ O próprio `executar.py` aplica as migrações, cria os dados iniciais se necess
 
 | Perfil | E-mail | Senha |
 | --- | --- | --- |
-| Administrador | `admin@vitta.com` | `123456` |
-| Médico | `medico@vitta.com` | `123456` |
+| Administrador | `admin@vitta.com` | `Teste02468@@` |
+| Médico | `medico@vitta.com` | `Medico02468@@` |
 | Recepcionista | `recepcao@vitta.com` | `123456` |
+| Paciente | 'paciente@vitta.com' | 'Paciente02468@@'
 
 Use o botão **Sair** para encerrar a sessão. Os dados da clínica ficam no banco SQLite do backend; a sessão de acesso fica no armazenamento local do navegador.
 
