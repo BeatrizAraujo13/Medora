@@ -18,7 +18,7 @@
         container: card,
         columns: [
           { label: "Paciente", renderizar: (row) => `<span class="table-primary">${window.Vitta.escaparHtml(row.name)}</span><span class="table-secondary">${window.Vitta.escaparHtml(row.email || "Sem e-mail")}</span>` },
-          { label: "CPF", renderizar: (row) => window.Vitta.escaparHtml(row.cpf) },
+          { label: "CPF", renderizar: (row) => window.Vitta.escaparHtml(window.Vitta.cpfFormat(row.cpf)) },
           { label: "Telefone", renderizar: (row) => window.Vitta.escaparHtml(row.phone || "—") },
           { label: "Convênio", renderizar: (row) => window.Vitta.escaparHtml(row.insurance || "—") }
         ],
@@ -47,7 +47,7 @@
       const editing = Boolean(patient);
       window.Vitta.modal({
         title: editing ? "Editar paciente" : "Novo paciente",
-        values: patient,
+        values: patient ? { ...patient, cpf: window.Vitta.cpfFormat(patient.cpf) } : undefined,
         fields: [
           { name: "name", label: "Nome completo", validation: "name", required: true, full: true },
           { name: "cpf", label: "CPF", required: true, placeholder: "000.000.000-00", maxLength: 14 },
